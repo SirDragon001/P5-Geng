@@ -20,6 +20,7 @@ var endOffset = 0;
 var actRandomSeed = 0;
 
 var i = 0;
+var h1;
 
 
 function setup(){
@@ -41,7 +42,8 @@ function draw(){
   for (var gridX = 0; gridX <= tileCountX; gridX++) {
     for (var gridY = 0; gridY <= tileCountY; gridY++) {
 
-      let h1 = (-height + map(spectrum[i], 0, 255, height, 0));
+      h1 = (-height + map(spectrum[i], 0, 255, height, 0));
+      var h2 = (-height + map(spectrum[i], 0, 255, height, 0))+50;
 
       push();
       translate(tileWidth * gridX, tileHeight * gridY);
@@ -49,8 +51,9 @@ function draw(){
 
 
       // draw module
-      fill(150, i, i);
-      rect(tileWidth / 2, tileHeight / 2, tileWidth/500*h1, tileWidth/500*h1)
+      noStroke();
+      fill((h1/2*(-1)), (h1/4*(-1)), (h1*2*(-1)));
+      rect(tileWidth, tileHeight, tileWidth/500*h1, tileWidth/500*h1)
       pop();
       
       i++;
