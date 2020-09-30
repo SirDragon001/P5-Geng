@@ -63,7 +63,7 @@ var img;
 
 function setup() {
   // Please work with a square canvas
-  canvasElement = createCanvas(800, 800);
+  canvasElement = createCanvas(600, 600);
   noCursor();
   noFill();
   lineColor = color(0);
