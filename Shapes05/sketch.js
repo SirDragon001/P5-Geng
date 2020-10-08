@@ -2,8 +2,8 @@
 // Variables
 // Tiles
 var count = 0;
-var tileCountX = 4;
-var tileCountY = 4;
+var tileCountX = 30;
+var tileCountY = 20;
 var tileWidth = 0;
 var tileHeight = 0;
 
@@ -13,9 +13,10 @@ var moveX = 0;
 var moveY = 0;
 
 // Linien
-var fächer = 16;
+var fächer = 50;
 var heightFactor = 2; // reichweite Höhe der Linien / 2 ist für Rand zu Rand
 var widthFactor = 2; // reichweite Breite der Linien / 2 ist für Rand zu Rand
+var blurre = 15; // Offset für weiss anteil 
 
 
 
@@ -54,23 +55,28 @@ function draw(){
       
       if (gridX%2 == 0) {
         if (gridY%2 == 0) {
+          // Top left Quadrant
           translate(centerW + moveY, centerH + moveX);
           //circle(centerW + moveY, centerH + moveX, radius);          
-          form((1),(1));
+          //form((1),(1), random(15, 255), random(15, 255), random(15, 255));
+          form((1),(1), random(5, 255), random(5, 255), random(5, 255));
         } else {
+          // Bottom left Quadrant
           translate(centerW + moveY, centerH - moveX);
           //circle(centerW + moveY, centerH - moveX, radius);          
-          form((1),(-1));
+          form((1),(-1), random(5, 255), random(5, 255), random(5, 255));
         }
       } else {
         if (gridY%2 == 0) {
+          // Top right Quadrant
           translate(centerW - moveY, centerH + moveX);
           //circle(centerW - moveY, centerH + moveX, radius);
-          form((-1),(1));
+          form((-1),(1),random(5, 255), random(5, 255), random(5, 255));
         } else {
+          // Bottom right Quadrant
           translate(centerW - moveY, centerH - moveX);
           //circle(centerW - moveY, centerH - moveX, radius);
-          form((-1),(-1));
+          form((-1),(-1),random(5, 255), random(5, 255), random(5, 255));
         }
       }
       pop();      
@@ -80,22 +86,35 @@ function draw(){
   //text('Number of Tiles: ' + tileCountX*tileCountY, 20, 40);
 }
 
-function form(xRotat, yRotate) {
+function form(xRotat, yRotate, farbe1, farbe2, farbe3) {
 
-  //Kreis
+  var spacing1 = tileWidth/fächer;
+  var spacing2 = tileHeight/fächer;
+
+  //Circle
   //circle(0,0,radius);
 
-  //Dreieck
+  //Triangle
   //triangle(30*xRotat, 75*yRotate, 58*xRotat, 20*yRotate, 86*xRotat, 75*yRotate);
 
   //Form
 
-  var spacing = tileWidth/fächer;
-
+    // Line
+  for (var i = 0; i*spacing1 < tileWidth+1; i++) {
+    //stroke(255-i*255/fächer,255-i*255/fächer,i*255/fächer);
+    
+    // Linien Horizintal
+    stroke(255-(i+blurre)*farbe1/fächer, 255-(i+blurre)*farbe2/fächer, 255-(i+blurre)*farbe3/fächer);    
+    strokeWeight(1)
+    line(-tileWidth/widthFactor*xRotat, (-tileHeight/widthFactor + i*spacing2)*yRotate, tileWidth/widthFactor*xRotat, tileHeight/widthFactor*yRotate);
   
-  for (var i = 0; i*spacing < tileWidth + 1; i++) {
-    stroke(255-i*255/fächer,255-i*255/fächer,i*255/fächer);    
-    strokeWeight(2)
-    line((tileWidth/widthFactor - i*spacing)*xRotat, tileHeight/heightFactor*yRotate, (-tileWidth/widthFactor + i*spacing)*xRotat, -tileHeight/heightFactor*yRotate);
+    // Linien Vertikal
+    stroke((i+blurre)*farbe1/fächer, (i+blurre)*farbe2/fächer, (i+blurre)*farbe3/fächer);    
+    strokeWeight(1)
+    line((tileWidth/widthFactor)*xRotat, tileHeight/heightFactor*yRotate, (-tileWidth/widthFactor + i*spacing1)*xRotat, -tileHeight/heightFactor*yRotate);
   }
+}
+
+function mousePressed(){
+  redraw(1);
 }
